@@ -1,20 +1,37 @@
 cmake_minimum_required(VERSION 3.13)
 project(mdbtoolscpp)
 
-set(CMAKE_CXX_STANDARD 14)
-include_directories(include)
-add_library(mdbtoolscpp
-        library.cpp
+set(HEADER_FILES
         include/schema/mdbenums.h
         include/schema/mdboperations.h
         include/schema/mdbschema.h
         include/schema/mdbtable.h
-        include/file.h
+        include/MdbFile.h
+        include/helpers/MdbFileHelpers.h
         include/func/endian.h
         include/mdbtools.h)
 
-add_executable(gosho library.cpp include/func/endian.h src/MdbFile.cpp src/backends.cpp include/backends.h include/func/buffers.h)
+set(SRC_FILES
+        src/MdbFile.cpp
+        src/helpers/MdbFileHelpers.cpp)
 
-if(WIN32)
-    target_link_libraries(gosho wsock32)
-endif(WIN32)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
+
+set(CMAKE_CXX_STANDARD 14)
+add_library(mdbtoolscpp STATIC ${HEADER_FILES} ${SRC_FILES} )
+
+#set_target_properties(mdbtoolscpp PROPERTIES COMPILE_FLAGS "${CMAKE_CXX_FLAGS} -c")
+
+cmake_minimum_required(VERSION 3.13)
+project(gosho)
+
+add_executable(gosho
+        library.cpp ${HEADER_FILES} ${SRC_FILES} )
+
+target_link_libraries(gosho mdbtoolscpp)
+
+
+if (WIN32)
+    target_link_libraries(mdbtoolscpp wsock32)
+endif (WIN32)
+

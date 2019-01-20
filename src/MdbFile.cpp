@@ -1,19 +1,23 @@
 #include <schema/mdbschema.h>
-
-using namespace mdbtools::schema;
+#include <schema/mdbenums.h>
+#include <fstream>
+#include <string>
+#include <MdbFile.h>
+#include <helpers/MdbFileHelpers.h>
 
 namespace mdbtools {
-    class MdbFile {
-    private:
-        MdbHandle *handle;
-    public:
-        void Open(const char *filename, MdbFileFlags flags) {
-            handle = new MdbHandle();
-            handle->default_backend
-        }
+    void MdbFile::open(const std::string &filename) {
+        fileStream = std::ifstream();
+        fileStream.exceptions(std::ifstream::failbit);
+        fileStream.open(filename, std::ifstream::binary | std::ifstream::in);
 
-        void Close() {
-            delete handle;
-        }
-    };
-}
+        version = mdbtools::helpers::MdbFileHelpers::getVersion(fileStream);
+
+    }
+
+    mdbtools::schema::MdbFileVersion MdbFile::getVersion() const { return version; }
+
+    MdbFile::~MdbFile() {
+        fileStream.close();
+    }
+};

@@ -30,7 +30,7 @@ namespace mdbtools {
         };
 
         struct MdbBackend {
-            MdbSchemaOption capabilities; /* see MDB_SHEXP_* */
+            MdbSchemaExportOptions capabilities; /* see MDB_SHEXP_* */
             char *types_table;
             char *type_shortdate;
             char *type_autonum;

@@ -5,6 +5,8 @@
 #ifndef MDBTOOLSCPP_PAGES_H
 #define MDBTOOLSCPP_PAGES_H
 
+#include <cstdint>
+
 namespace mdbtools {
     namespace schema {
         enum class MdbPageType {
@@ -16,12 +18,13 @@ namespace mdbtools {
             MAP
         };
 
-        enum class MdbVersion {
-            JET3 = 0,
-            JET4 = 1,
+        enum class MdbFileVersion : uint16_t {
+            JET3 = 0x00,
+            JET4 = 0x01,
             ACCDB_2007 = 0x02,
-            ACCDB_2010 = 0x0103
+            ACCDB_2010 = 0x03
         };
+
 
         enum class MdbObject {
             FORM = 0,
@@ -104,7 +107,7 @@ namespace mdbtools {
             REQUIRED = 0x08
         };
 
-        enum class MdbSchemaOption {
+        enum class MdbSchemaExportOptions {
             DROPTABLE = 1 << 0, /* issue drop table during export */
             CST_NOTNULL = 1 << 1, /* generate NOT NULL constraints */
             CST_NOTEMPTY = 1 << 2, /* <>'' constraints */

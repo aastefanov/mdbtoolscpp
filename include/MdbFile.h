@@ -2,12 +2,20 @@
 #define MDBTOOLSCPP_FILE_H
 
 #include <cstddef>
-#include "schema/mdbschema.h"
+#include <schema/mdbschema.h>
+#include <schema/mdbenums.h>
+#include <fstream>
 
 namespace mdbtools {
+
     class MdbFile {
+    private:
+        std::ifstream fileStream;
+        schema::MdbFileVersion version;
     public:
-        void Open(const char *filename, MdbFileFlags flags);
+        void open(const std::string &filename);
+        schema::MdbFileVersion getVersion() const;
+        ~MdbFile();
     };
 
     extern size_t mdb_read_pg(mdbtools::schema::MdbHandle *mdb, unsigned long pg);
@@ -43,7 +51,6 @@ namespace mdbtools {
     extern mdbtools::schema::MdbHandle *mdb_clone_handle(mdbtools::schema::MdbHandle *mdb);
 
     extern void mdb_swap_pgbuf(mdbtools::schema::MdbHandle *mdb);
-}
 }
 
 #endif //MDBTOOLSCPP_FILE_H
